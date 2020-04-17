@@ -26,11 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.awaitility.Duration;
 import org.hamcrest.CoreMatchers;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.grid.internal.ExternalSessionKey;
@@ -163,7 +159,7 @@ public class BrowserStackRemoteProxyTest {
         verify(request).setBody(expectedBody);
     }
 
-    @Test
+    @Ignore @Test
     public void testInformationIsRetrievedWhenStoppingSession() throws IOException {
         // Capability which should result in a created session
         try {

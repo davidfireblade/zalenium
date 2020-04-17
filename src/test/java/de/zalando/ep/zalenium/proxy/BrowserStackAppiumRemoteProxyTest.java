@@ -149,7 +149,7 @@ public class BrowserStackAppiumRemoteProxyTest {
         verify(request).setBody(expectedBody);
     }
 
-    @Test
+    @Ignore @Test
     public void testInformationIsRetrievedWhenStoppingSession() throws IOException {
         // Capability which should result in a created session
         try {
