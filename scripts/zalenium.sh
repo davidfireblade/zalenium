@@ -149,6 +149,24 @@ WaitBrowserStackProxy()
 }
 export -f WaitBrowserStackProxy
 
+WaitBrowserStackAppiumProxy()
+{
+    # Wait for the sauce node success
+    while ! curl -sSL "http://localhost:30006/wd/hub/status" 2>&1 \
+            | jq -r '.status' 2>&1 | grep "0" >/dev/null; do
+        echo -n '.'
+        sleep 0.2
+    done
+
+    # Also wait for the Proxy to be registered into the hub
+    while ! curl -sSL "http://localhost:4444${CONTEXT_PATH}/grid/console" 2>&1 \
+            | grep "BrowserStackRemoteProxy" 2>&1 >/dev/null; do
+        echo -n '.'
+        sleep 0.2
+    done
+}
+export -f WaitBrowserStackAppiumProxy
+
 WaitTestingBotProxy()
 {
     # Wait for the testingbot node success
@@ -579,6 +597,21 @@ StartUp()
             exit 12
         fi
         echo "Browser Stack node started!"
+
+        echo "Starting Browser Stack Appium node..."
+        java -Dlogback.loglevel=${DEBUG_MODE} -Dlogback.appender=${LOGBACK_APPENDER} \
+         -Dlogback.configurationFile=${LOGBACK_PATH} \
+         -Djava.util.logging.config.file=logging_${DEBUG_MODE}.properties \
+         -cp ${ZALENIUM_ARTIFACT} org.openqa.grid.selenium.GridLauncherV3 -role node -hub http://localhost:4444${CONTEXT_PATH}/grid/register \
+         -registerCycle 0 -proxy de.zalando.ep.zalenium.proxy.BrowserStackRemoteAppiumProxy \
+         -nodePolling 90000 -port 30006 ${DEBUG_FLAG} &
+        echo $! > ${PID_PATH_BROWSER_STACK_NODE}
+
+        if ! timeout --foreground "40s" bash -c WaitBrowserStackAppiumProxy; then
+            echo "BrowserStackRemoteAppiumProxy failed to start after 40 seconds, failing..."
+            exit 12
+        fi
+        echo "Browser Stack Appium node started!"
         if [ "$START_TUNNEL" = true ]; then
             export BROWSER_STACK_LOG_FILE="$(pwd)/logs/browserstack-stdout.log"
             export BROWSER_STACK_TUNNEL="true"

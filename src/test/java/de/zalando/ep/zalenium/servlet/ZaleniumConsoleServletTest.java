@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import de.zalando.ep.zalenium.container.DockerContainerClient;
+import de.zalando.ep.zalenium.proxy.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,10 +26,6 @@ import org.openqa.grid.internal.GridRegistry;
 import org.openqa.selenium.remote.server.jmx.JMXHelper;
 
 import de.zalando.ep.zalenium.container.ContainerFactory;
-import de.zalando.ep.zalenium.proxy.BrowserStackRemoteProxy;
-import de.zalando.ep.zalenium.proxy.DockerSeleniumRemoteProxy;
-import de.zalando.ep.zalenium.proxy.SauceLabsRemoteProxy;
-import de.zalando.ep.zalenium.proxy.TestingBotRemoteProxy;
 import de.zalando.ep.zalenium.util.CommonProxyUtilities;
 import de.zalando.ep.zalenium.util.DockerContainerMock;
 import de.zalando.ep.zalenium.util.SimpleRegistry;
@@ -64,6 +61,10 @@ public class ZaleniumConsoleServletTest {
         BrowserStackRemoteProxy.setCommonProxyUtilities(commonProxyUtilities);
         BrowserStackRemoteProxy browserStackRemoteProxy = BrowserStackRemoteProxy.getNewInstance(registrationRequest, registry);
 
+        registrationRequest = TestUtils.getRegistrationRequestForTesting(30006, BrowserStackRemoteAppiumProxy.class.getCanonicalName());
+        BrowserStackRemoteAppiumProxy.setCommonProxyUtilities(commonProxyUtilities);
+        BrowserStackRemoteAppiumProxy browserStackRemoteAppiumProxy = BrowserStackRemoteAppiumProxy.getNewInstance(registrationRequest, registry);
+
         registrationRequest = TestUtils.getRegistrationRequestForTesting(30003, TestingBotRemoteProxy.class.getCanonicalName());
         TestingBotRemoteProxy.setCommonProxyUtilities(commonProxyUtilities);
         TestingBotRemoteProxy testingBotRemoteProxy = TestingBotRemoteProxy.getNewInstance(registrationRequest, registry);
@@ -75,6 +76,7 @@ public class ZaleniumConsoleServletTest {
         registry.add(proxyTwo);
         registry.add(sauceLabsProxy);
         registry.add(browserStackRemoteProxy);
+        registry.add(browserStackRemoteAppiumProxy);
         registry.add(testingBotRemoteProxy);
 
         request = mock(HttpServletRequest.class);
