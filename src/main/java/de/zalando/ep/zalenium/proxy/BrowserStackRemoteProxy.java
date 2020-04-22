@@ -87,7 +87,7 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
         // https://BS_USER:BS_KEY@www.browserstack.com/automate/sessions/SELENIUM_SESSION_ID.json
         String browserStackBaseTestUrl = "https://api.browserstack.com/automate/sessions/";
         String browserStackTestUrl = browserStackBaseTestUrl + String.format("%s.json", seleniumSessionId);
-        String browserStackAppiumBaseTestUrl = "https://api.browserstack.com/app-automate/sessions/";
+        String browserStackAppiumBaseTestUrl = "https://api-cloud.browserstack.com/app-automate/sessions/";
         String browserStackAppiumTestUrl = browserStackAppiumBaseTestUrl + String.format("%s.json", seleniumSessionId);
         for (int i = 0; i < 5; i++) {
             try {
