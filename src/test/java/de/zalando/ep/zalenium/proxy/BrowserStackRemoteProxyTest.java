@@ -159,7 +159,7 @@ public class BrowserStackRemoteProxyTest {
         verify(request).setBody(expectedBody);
     }
 
-    @Ignore @Test
+    @Test
     public void testInformationIsRetrievedWhenStoppingSession() throws IOException {
         // Capability which should result in a created session
         try {
@@ -171,7 +171,7 @@ public class BrowserStackRemoteProxyTest {
             TestUtils.ensureRequiredInputFilesExist(temporaryFolder);
             CommonProxyUtilities commonProxyUtilities = TestUtils.mockCommonProxyUtilitiesForDashboardTesting(temporaryFolder);
             Environment env = new Environment();
-            String mockTestInformationUrl = "https://api.browserstack.com/automate/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.json";
+            String mockTestInformationUrl = "https://api.browserstack.com/automate/sessions/c9d74c001d799da2fafb4014e5679ccb024f3639.json";
             when(commonProxyUtilities.readJSONFromUrl(mockTestInformationUrl,
                     env.getStringEnvVariable("BROWSER_STACK_USER", ""),
                     env.getStringEnvVariable("BROWSER_STACK_KEY", ""))).thenReturn(informationSample);
@@ -182,7 +182,7 @@ public class BrowserStackRemoteProxyTest {
             BrowserStackRemoteProxy bsSpyProxy = spy(browserStackProxy);
             TestSession testSession = bsSpyProxy.getNewSession(requestedCapability);
             Assert.assertNotNull(testSession);
-            String mockSeleniumSessionId = "77e51cead8e6e37b0a0feb0dfa69325b2c4acf97";
+            String mockSeleniumSessionId = "c9d74c001d799da2fafb4014e5679ccb024f3639";
             testSession.setExternalKey(new ExternalSessionKey(mockSeleniumSessionId));
 
             // We release the session, the node should be free
@@ -201,10 +201,10 @@ public class BrowserStackRemoteProxyTest {
             Assert.assertThat(testInformation.getFileName(),
                     CoreMatchers.containsString("browserstack_loadZalandoPageAndCheckTitle_safari_OS_X"));
             Assert.assertEquals("safari 6.2, OS X Mountain Lion", testInformation.getBrowserAndPlatform());
-            Assert.assertEquals("https://www.browserstack.com/s3-upload/bs-video-logs-use/s3/77e51cead8e6e37b0" +
-                            "a0feb0dfa69325b2c4acf97/video-77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.mp4?AWSAccessKeyId=" +
-                            "AKIAIOW7IEY5D4X2OFIA&Expires=1497088589&Signature=tQ9SCH1lgg6FjlBIhlTDwummLWc%3D&response-" +
-                            "content-type=video%2Fmp4",
+            Assert.assertEquals("https://automate.browserstack.com/sessions/c9d74c001d799da2fafb4014e5679ccb024" +
+                            "f3639/video?token=L0ZFWlFrK0ViUytOYTJHMGMvMlJUVDVPYXEvUWJHZzFoRTNuV3BWSGxjaU11bXIrbDBBN0wxS" +
+                            "DRndDQxUFphVWNSakl1UitwSkJhM09WY1pCeTBzbHc9PS0tWjNLeUZtVk1oZndKd2xiMzBoZWUwUT09--30b7ac4015" +
+                            "b121c176a91b39533d8fbd7356e9ef&source=rest_api&diff=14176.062045973",
                     testInformation.getVideoUrl());
 
         } finally {

@@ -20,11 +20,11 @@ import java.util.List;
 public class BrowserStackRemoteAppiumProxy extends CloudTestingRemoteProxy {
 
     private static final String BROWSER_STACK_URL = getEnv().getStringEnvVariable("BROWSER_STACK_URL", "http://hub-cloud.browserstack.com:80");
-    private static final String BROWSER_STACK_ACCOUNT_INFO = "https://api.browserstack.com/app-automate/plan.json";
+    private static final String BROWSER_STACK_ACCOUNT_INFO = "https://api-cloud.browserstack.com/app-automate/plan.json";
     private static final Logger logger = LoggerFactory.getLogger(BrowserStackRemoteAppiumProxy.class.getName());
     private static final String BROWSER_STACK_USER = getEnv().getStringEnvVariable("BROWSER_STACK_USER", "");
     private static final String BROWSER_STACK_KEY = getEnv().getStringEnvVariable("BROWSER_STACK_KEY", "");
-    private static final String BROWSER_STACK_PROXY_NAME = "BrowserStackAppium";
+    private static final String BROWSER_STACK_PROXY_NAME = "BSAppium";
 
     public BrowserStackRemoteAppiumProxy(RegistrationRequest request, GridRegistry registry) {
         super(updateBSCapabilities(request, BROWSER_STACK_ACCOUNT_INFO), registry);
@@ -33,7 +33,7 @@ public class BrowserStackRemoteAppiumProxy extends CloudTestingRemoteProxy {
     @VisibleForTesting
     private static RegistrationRequest updateBSCapabilities(RegistrationRequest registrationRequest, String url) {
         String currentName = Thread.currentThread().getName();
-        Thread.currentThread().setName("BrowserStackAppium");
+        Thread.currentThread().setName("BSAppium");
         JsonElement bsAccountInfo = getCommonProxyUtilities().readJSONFromUrl(url, BROWSER_STACK_USER, BROWSER_STACK_KEY);
         try {
             registrationRequest.getConfiguration().capabilities.clear();
@@ -85,7 +85,7 @@ public class BrowserStackRemoteAppiumProxy extends CloudTestingRemoteProxy {
     @Override
     public TestInformation getTestInformation(String seleniumSessionId) {
         // https://BS_USER:BS_KEY@www.browserstack.com/app-automate/sessions/SELENIUM_SESSION_ID.json
-        String browserStackBaseTestUrl = "https://api.browserstack.com/app-automate/sessions/";
+        String browserStackBaseTestUrl = "https://api-cloud.browserstack.com/app-automate/sessions/";
         String browserStackTestUrl = browserStackBaseTestUrl + String.format("%s.json", seleniumSessionId);
         for (int i = 0; i < 5; i++) {
             try {
@@ -107,11 +107,24 @@ public class BrowserStackRemoteAppiumProxy extends CloudTestingRemoteProxy {
                 String platformVersion = automation_session.get("os_version").getAsString();
                 String videoUrl = automation_session.get("video_url").getAsString();
                 List<String> logUrls = new ArrayList<>();
-                logUrls.add(automation_session.get("browser_console_logs_url").getAsString());
+                if (automation_session.get("browser_console_logs_url").isJsonNull()) {
+                    if (!automation_session.get("appium_logs_url").isJsonNull()) {
+                        logUrls.add(automation_session.get("appium_logs_url").getAsString());
+                    }
+                } else {
+                    logUrls.add(automation_session.get("browser_console_logs_url").getAsString());
+                }
 
                 List<RemoteLogFile> remoteLogFiles = new ArrayList<>();
                 remoteLogFiles.add(new RemoteLogFile(automation_session.get("logs").getAsString(), "browserstack.log", true));
-                remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
+                if (automation_session.get("selenium_logs_url").isJsonNull()) {
+                    if (!automation_session.get("device_logs_url").isJsonNull()) {
+                        remoteLogFiles.add(new RemoteLogFile(automation_session.get("device_logs_url").getAsString(), "device.log", false));
+                    }
+                } else {
+                    remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
+                }
+
                 if (videoUrl.startsWith("http")) {
                     return new TestInformation.TestInformationBuilder()
                         .withSeleniumSessionId(seleniumSessionId)

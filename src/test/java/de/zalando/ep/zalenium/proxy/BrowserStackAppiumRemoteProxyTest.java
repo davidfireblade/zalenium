@@ -149,7 +149,7 @@ public class BrowserStackAppiumRemoteProxyTest {
         verify(request).setBody(expectedBody);
     }
 
-    @Ignore @Test
+    @Test
     public void testInformationIsRetrievedWhenStoppingSession() throws IOException {
         // Capability which should result in a created session
         try {
@@ -161,7 +161,7 @@ public class BrowserStackAppiumRemoteProxyTest {
             TestUtils.ensureRequiredInputFilesExist(temporaryFolder);
             CommonProxyUtilities commonProxyUtilities = TestUtils.mockCommonProxyUtilitiesForDashboardTesting(temporaryFolder);
             Environment env = new Environment();
-            String mockTestInformationUrl = "https://api.browserstack.com/app-automate/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.json";
+            String mockTestInformationUrl = "https://api-cloud.browserstack.com/app-automate/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.json";
             when(commonProxyUtilities.readJSONFromUrl(mockTestInformationUrl,
                     env.getStringEnvVariable("BROWSER_STACK_USER", ""),
                     env.getStringEnvVariable("BROWSER_STACK_KEY", ""))).thenReturn(informationSample);
@@ -172,7 +172,7 @@ public class BrowserStackAppiumRemoteProxyTest {
             BrowserStackRemoteAppiumProxy bsSpyProxy = spy(browserStackRemoteAppiumProxy);
             TestSession testSession = bsSpyProxy.getNewSession(requestedCapability);
             Assert.assertNotNull(testSession);
-            String mockSeleniumSessionId = "77e51cead8e6e37b0a0feb0dfa69325b2c4acf97";
+            String mockSeleniumSessionId = "368c8e995930980ae84e6d265a737149aa7e943c";
             testSession.setExternalKey(new ExternalSessionKey(mockSeleniumSessionId));
 
             // We release the session, the node should be free
@@ -189,12 +189,9 @@ public class BrowserStackAppiumRemoteProxyTest {
             TestInformation testInformation = bsSpyProxy.getTestInformation(mockSeleniumSessionId);
             Assert.assertEquals("loadZalandoPageAndCheckTitle", testInformation.getTestName());
             Assert.assertThat(testInformation.getFileName(),
-                    CoreMatchers.containsString("browserstack_loadZalandoPageAndCheckTitle_safari_OS_X"));
-            Assert.assertEquals("safari 6.2, OS X Mountain Lion", testInformation.getBrowserAndPlatform());
-            Assert.assertEquals("https://www.browserstack.com/s3-upload/bs-video-logs-use/s3/77e51cead8e6e37b0" +
-                            "a0feb0dfa69325b2c4acf97/video-77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.mp4?AWSAccessKeyId=" +
-                            "AKIAIOW7IEY5D4X2OFIA&Expires=1497088589&Signature=tQ9SCH1lgg6FjlBIhlTDwummLWc%3D&response-" +
-                            "content-type=video%2Fmp4",
+                    CoreMatchers.containsString("browserstack_loadZalandoPageAndCheckTitle_Google_Pixel_3_android"));
+            Assert.assertEquals("Google Pixel 3 app, android 9.0", testInformation.getBrowserAndPlatform());
+            Assert.assertEquals("https://app-automate.browserstack.com/sessions/368c8e995930980ae84e6d265a737149aa7e943c/video?token=c3NrOHVqS1BkVmI0WHEvNVRSbnAvOFRVcG5SWVVlSzBXVVJwYWlFaDV6SlRCUE1GZGFmM3phVnQzN1pjN0RqdW01bWlVU05sdEpZZ1VKc0hkdTF1NGc9PS0tUGVsaDRWcGwyc0dzWnFUTXJRVHcvdz09--15e7e1ed280d268680218988827bd4c9994119f1&source=rest_api&diff=2183.829286866",
                     testInformation.getVideoUrl());
 
         } finally {

@@ -2,21 +2,28 @@
   "automation_session": {
     "name": "loadZalandoPageAndCheckTitle",
     "duration": 29,
-    "os": "OS X",
-    "os_version": "Mountain Lion",
-    "browser_version": "6.2",
-    "browser": "safari",
-    "device": null,
+    "os": "android",
+    "os_version": "9.0",
+    "browser_version": "app",
+    "browser": null,
+    "device": "Google Pixel 3",
     "status": "done",
-    "hashed_id": "77e51cead8e6e37b0a0feb0dfa69325b2c4acf97",
+    "hashed_id": "368c8e995930980ae84e6d265a737149aa7e943c",
     "reason": "CLIENT_STOPPED_SESSION",
     "build_name": "Untitled Build",
     "project_name": "Untitled Project",
-    "logs": "https://api.browserstack.com/app-automate/builds/dfceb784d33931f3e96822de8782c9142001ee2a/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97/logs",
-    "browser_url": "https://api.browserstack.com/app-automate/builds/dfceb784d33931f3e96822de8782c9142001ee2a/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97",
-    "public_url": "https://api.browserstack.com/app-automate/builds/dfceb784d33931f3e96822de8782c9142001ee2a/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97?auth_token=f2f29cf4b3e5dd8cfb7c6a4aaef316c1b7efec703605028c3f5bcda52ef2bee6",
-    "video_url": "https://api.browserstack.com/s3-upload/bs-video-logs-use/s3/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97/video-77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.mp4?AWSAccessKeyId=AKIAIOW7IEY5D4X2OFIA&Expires=1497088589&Signature=tQ9SCH1lgg6FjlBIhlTDwummLWc%3D&response-content-type=video%2Fmp4",
-    "browser_console_logs_url": "https://api.browserstack.com/s3-upload/bs-video-logs-use/s3/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97/video-77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.mp4?AWSAccessKeyId=AKIAIOW7IEY5D4X2OFIA&Expires=1497088589&Signature=tQ9SCH1lgg6FjlBIhlTDwummLWc%3D&response-content-type=video%2Fmp4",
-    "selenium_logs_url": "https://api.browserstack.com/s3-upload/bs-video-logs-use/s3/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97/video-77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.mp4?AWSAccessKeyId=AKIAIOW7IEY5D4X2OFIA&Expires=1497088589&Signature=tQ9SCH1lgg6FjlBIhlTDwummLWc%3D&response-content-type=video%2Fmp4"
+    "logs": "https://app-automate.browserstack.com/builds/978a8e46c172a8a86aff5f7d7c0f17050ef2ac1d/sessions/368c8e995930980ae84e6d265a737149aa7e943c/logs",
+    "browser_url": "https://app-automate.browserstack.com/builds/978a8e46c172a8a86aff5f7d7c0f17050ef2ac1d/sessions/368c8e995930980ae84e6d265a737149aa7e943c",
+    "public_url": "https://app-automate.browserstack.com/builds/978a8e46c172a8a86aff5f7d7c0f17050ef2ac1d/sessions/368c8e995930980ae84e6d265a737149aa7e943c?auth_token=a18ab673544d751b496b3f4e77df45c7f14feccbe5cd9a9596495ca97e813f74",
+    "appium_logs_url": "https://api.browserstack.com/app-automate/builds/978a8e46c172a8a86aff5f7d7c0f17050ef2ac1d/sessions/368c8e995930980ae84e6d265a737149aa7e943c/appiumlogs",
+    "video_url": "https://app-automate.browserstack.com/sessions/368c8e995930980ae84e6d265a737149aa7e943c/video?token=c3NrOHVqS1BkVmI0WHEvNVRSbnAvOFRVcG5SWVVlSzBXVVJwYWlFaDV6SlRCUE1GZGFmM3phVnQzN1pjN0RqdW01bWlVU05sdEpZZ1VKc0hkdTF1NGc9PS0tUGVsaDRWcGwyc0dzWnFUTXJRVHcvdz09--15e7e1ed280d268680218988827bd4c9994119f1&source=rest_api&diff=2183.829286866",
+    "device_logs_url": "https://api.browserstack.com/app-automate/builds/978a8e46c172a8a86aff5f7d7c0f17050ef2ac1d/sessions/368c8e995930980ae84e6d265a737149aa7e943c/devicelogs",
+    "app_details": {
+      "app_url": "bs://f828a34e518e0fef1e127830301b89fcd22ea3bf",
+      "app_name": "com.dynatrace.easytravel.android",
+      "app_version": "7.1",
+      "app_custom_id": "EasyTravelAndroid",
+      "uploaded_at": "2020-04-22T10:44:54.000Z"
+    }
   }
 }
