@@ -1,0 +1,24 @@
+{
+  "automation_session": {
+    "name": "loadZalandoPageAndCheckTitle",
+    "duration": 29,
+    "os": "OS X",
+    "os_version": "Mojave",
+    "browser_version": "12.1",
+    "browser": "safari",
+    "device": null,
+    "status": "done",
+    "hashed_id": "d27616b6b88fc593b54a5dd7fb72c8ebca7f510e",
+    "reason": "CLIENT_STOPPED_SESSION",
+    "build_name": "Untitled Build",
+    "project_name": "Untitled Project",
+    "logs": "https://automate.browserstack.com/builds/9cdf9ca1c7cbdc303e5b23e790bf325d250d2c84/sessions/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e/logs",
+    "browser_url": "https://automate.browserstack.com/builds/9cdf9ca1c7cbdc303e5b23e790bf325d250d2c84/sessions/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e",
+    "public_url": "https://automate.browserstack.com/builds/9cdf9ca1c7cbdc303e5b23e790bf325d250d2c84/sessions/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e?auth_token=2de0fb0049e05f4fc8d51b6c7d9c1c1140699473a287b71aa9eb7f6d867bacad",
+    "appium_logs_url": "https://api.browserstack.com/automate/builds/9cdf9ca1c7cbdc303e5b23e790bf325d250d2c84/sessions/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e/appiumlogs",
+    "video_url": "https://automate.browserstack.com/sessions/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e/video?token=NFRqNEc0TVdvV1BhMVZhdmdrOGNjRFcrTEhxbUdUb1ZieEhxQVg5ZlNsWU0yQ2lnU2tGTTV4TEVyLzNuYWR4NEQ2ZllJcytQcGtHRWlPd0IrSnlOU2c9PS0td0VURUF0YmxlNEpicXB5YzZHdnpMQT09--2e1f2f625e7996f64e08d363b85c332b88c35dbf&source=rest_api&diff=45798.42101425",
+    "browser_console_logs_url": "https://automate.browserstack.com/s3-upload/bs-selenium-logs-euw/s3.eu-west-1/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e-console-logs.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA2XUQHUQMNIMLYSKY%2F20200424%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20200424T064526Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=03b874bf32e071fe27bae44c53700a56f6ba5a3b00436912700807c57f575ed2",
+    "har_logs_url": "https://automate.browserstack.com/s3-upload/bs-selenium-logs-euw/s3.eu-west-1/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e-har-logs.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA2XUQHUQMNIMLYSKY%2F20200424%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20200424T064526Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=0b79caccf13ab8fe2e50f279f62e78714e2fa26428637dc0abc593c91192b6b9",
+    "selenium_logs_url": "https://automate.browserstack.com/s3-upload/bs-selenium-logs-euw/s3.eu-west-1/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e/d27616b6b88fc593b54a5dd7fb72c8ebca7f510e-selenium-logs.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA2XUQHUQMNIMLYSKY%2F20200424%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20200424T064526Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=a4e4def84b8374d4e504f45da3e430ec7f1e432f84f74d2a01f72e7d78a3c722"
+  }
+}
