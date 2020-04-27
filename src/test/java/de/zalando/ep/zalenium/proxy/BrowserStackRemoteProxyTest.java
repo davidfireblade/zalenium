@@ -58,6 +58,7 @@ public class BrowserStackRemoteProxyTest {
 
     private BrowserStackRemoteProxy browserStackProxy;
     private GridRegistry registry;
+    private Boolean firstMockTest = false;
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -181,12 +182,23 @@ public class BrowserStackRemoteProxyTest {
             sessionMockTest(BrowserType.CHROME, Platform.IOS,
                     "browserstack_appium_browser_testinformation.json",
                     "3ae6c5ae782376c2626f5f567b64788270fccebb",
-                    "browserstack_loadZalandoPageAndCheckTitle_safari_ios",
-                    "safari 12.1, ios 13.2",
+                    "browserstack_loadZalandoPageAndCheckTitle_iPhone_11_Pro_ios",
+                    "iPhone 11 Pro N/A, ios 13.2",
                     "https://automate.browserstack.com/sessions/3ae6c5ae782376c2626f5f567b64788270fccebb/video?" +
                             "token=c3FkT2F4WHBzNjRQODhhME5YWW1BZXV2TUNNaFlWZGtMbURleGxRRFgrTW9OWmxuOVgxZjBPbWhMTHJ1TFcy" +
                             "Z0dEREFndWpkSythZldkUktyVFRTWUE9PS0taFlCVWI5SndMU0xZSHp5RjY0ZlFSUT09--e39f8c5ad872d2d2b7a5" +
                             "cff3bf25f12358491077&source=rest_api&diff=45400.927527361");
+
+            // mobile app session
+            sessionMockTest(BrowserType.CHROME, Platform.ANDROID,
+                    "browserstack_appium_app_testinformation.json",
+                    "40693fb3fca7b00aac49e72908a648fcfa7af47a",
+                    "browserstack_loadZalandoPageAndCheckTitle_Google_Pixel_3_android",
+                    "Google Pixel 3 app, android 9.0",
+                    "https://app-automate.browserstack.com/sessions/40693fb3fca7b00aac49e72908a648fcfa7af47a/vi" +
+                            "deo?token=cmtPS05EejFrQmZxd3R4WlowOWVLYUxsWVFRbUhJbHh1Q0czYzcvM1pIY1RQMENXR2VWd2xNMnI3aEtz" +
+                            "NWUzeng3U0srU1VVRlFya2s5Q0cvbld3NWc9PS0teks3azkxSTEzRUlZT1N2QXNCVzFRQT09--0b5a5fadabfcf5ab" +
+                            "acc201104f9ba76eea5aae3b&source=rest_api&diff=45840.954378879");
 
         } finally {
             BrowserStackRemoteProxy.restoreCommonProxyUtilities();
@@ -203,7 +215,10 @@ public class BrowserStackRemoteProxyTest {
         requestedCapability.put(CapabilityType.PLATFORM_NAME, platform);
 
         JsonElement informationSample = TestUtils.getTestInformationSample(informationSampleName);
-        TestUtils.ensureRequiredInputFilesExist(temporaryFolder);
+        if (!firstMockTest) {
+            TestUtils.ensureRequiredInputFilesExist(temporaryFolder);
+            firstMockTest = true;
+        }
         CommonProxyUtilities commonProxyUtilities = TestUtils.mockCommonProxyUtilitiesForDashboardTesting(temporaryFolder);
         Environment env = new Environment();
         String mockTestInformationUrl = "https://api-cloud.browserstack.com/app-automate/sessions/" + mockSeleniumSessionId + ".json";

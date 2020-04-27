@@ -145,6 +145,7 @@ public class TestUtils {
     }
 
     public static void ensureRequiredInputFilesExist(TemporaryFolder temporaryFolder) throws IOException {
+
         temporaryFolder.newFile("dashboard_template.html");
         temporaryFolder.newFile("zalando.ico");
         temporaryFolder.newFolder("css");
