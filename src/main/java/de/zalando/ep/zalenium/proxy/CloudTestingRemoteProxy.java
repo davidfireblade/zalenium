@@ -274,7 +274,6 @@ public class CloudTestingRemoteProxy extends DefaultRemoteProxy {
                         TestInformation.TestStatus.COMPLETED : TestInformation.TestStatus.TIMEOUT;
                 testInformation.setTestStatus(status);
                 String fileNameWithFullPath = testInformation.getVideoFolderPath() + "/" + testInformation.getFileName();
-                logger.debug("authentication required???? " + useAuthenticationToDownloadFile());
                 commonProxyUtilities.downloadFile(testInformation.getVideoUrl(), fileNameWithFullPath,
                         getUserNameValue(), getAccessKeyValue(), useAuthenticationToDownloadFile());
                 for (String logUrl : testInformation.getLogUrls()) {
@@ -285,13 +284,11 @@ public class CloudTestingRemoteProxy extends DefaultRemoteProxy {
                         fileName = fileName.substring(0, fileName.indexOf('?'));
                     }
                     fileNameWithFullPath = testInformation.getLogsFolderPath() + "/" + fileName;
-                    logger.debug("authentication required???? " + useAuthenticationToDownloadFile());
                     commonProxyUtilities.downloadFile(logUrl, fileNameWithFullPath,
                             getUserNameValue(), getAccessKeyValue(), useAuthenticationToDownloadFile(), 2);
                 }
                 for (RemoteLogFile remoteLogFile : testInformation.getRemoteLogFiles()) {
                     fileNameWithFullPath = testInformation.getLogsFolderPath() + "/" + remoteLogFile.getLocalFileName();
-                    logger.debug("authentication required???? " + remoteLogFile.isAuthenticationRequired());
                     commonProxyUtilities.downloadFile(remoteLogFile.getRemoteUrl(), fileNameWithFullPath,
                             getUserNameValue(), getAccessKeyValue(), remoteLogFile.isAuthenticationRequired(), 2);
                 }

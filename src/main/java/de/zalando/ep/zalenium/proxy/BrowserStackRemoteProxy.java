@@ -93,11 +93,11 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
             try {
                 JsonObject testData = null;
                 if ((i & 1) == 0) {
-                    logger.debug("even try");
+                    logger.debug("mobile try");
                     testData = getCommonProxyUtilities().readJSONFromUrl(browserStackAppiumTestUrl, BROWSER_STACK_USER,
                             BROWSER_STACK_KEY).getAsJsonObject();
                 } else {
-                    logger.debug("odd try");
+                    logger.debug("browser try");
                     testData = getCommonProxyUtilities().readJSONFromUrl(browserStackTestUrl, BROWSER_STACK_USER,
                             BROWSER_STACK_KEY).getAsJsonObject();
                 }
@@ -110,7 +110,7 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                // save browser or appium fields depends of the case
                 if (automation_session.get("browser").isJsonNull()) {
                     if (!automation_session.get("device").isJsonNull()) {
-                        logger.debug("we have device");
+                        logger.debug("mobile json data from API");
                         browser = automation_session.get("device").getAsString();
                         remoteLogFiles.add(new RemoteLogFile(automation_session.get("appium_logs_url").getAsString(), "selenium.log", true));
                         if (automation_session.has("browser_console_logs_url")) {
@@ -120,7 +120,7 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                         }
                     }
                 } else {
-                    logger.debug("we have browser");
+                    logger.debug("browser json data from API");
                     browser = automation_session.get("browser").getAsString();
                     remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
                     logUrls.add(automation_session.get("browser_console_logs_url").getAsString());
@@ -133,12 +133,8 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                 String platformVersion = automation_session.get("os_version").getAsString();
                 String videoUrl = automation_session.get("video_url").getAsString();
                 remoteLogFiles.add(new RemoteLogFile(automation_session.get("logs").getAsString(), "browserstack.log", true));
-                logger.debug("we have device: " +  browser);
-                logger.debug("the new version");
-                logger.debug("we have videurl: " +  videoUrl);
 
                 if (videoUrl.startsWith("http")) {
-                    logger.debug("we have http?");
                     return new TestInformation.TestInformationBuilder()
                         .withSeleniumSessionId(seleniumSessionId)
                         .withTestName(testName)
@@ -156,7 +152,6 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                         .build();
                 }
             } catch (Exception e) {
-                logger.debug("a crash");
                 logger.debug(e.toString(), e);
                 try {
                     Thread.sleep(1000 * 10);
