@@ -1,5 +1,6 @@
 package de.zalando.ep.zalenium.matcher;
 
+import java.util.List;
 import java.util.Map;
 import org.openqa.grid.internal.utils.DefaultCapabilityMatcher;
 import org.openqa.selenium.MutableCapabilities;
@@ -38,6 +39,24 @@ public class ZaleniumCapabilityMatcher extends DefaultCapabilityMatcher {
             logger.debug("Capability supported by docker-selenium, should not be processed by " +
                 "a Cloud Testing Provider: {}", requestedCapability);
             return false;
+        }
+
+        if (nodeCapability != null) {
+            if (requestedCapability.containsKey(CapabilityType.APPLICATION_NAME) && requestedCapability.get(CapabilityType.APPLICATION_NAME).equals("BrowserStack") && !nodeCapability.get(CapabilityType.BROWSER_NAME).equals("BrowserStack")) {
+                logger.debug("Capability supported by browserstack browser, should not be processed by " +
+                        "a browserswtack mobile node: {}", requestedCapability);
+                return false;
+            } else if (requestedCapability.get(CapabilityType.BROWSER_NAME).equals("BrowserStack")) {
+                if (requestedCapability.containsKey("app") && !nodeCapability.get(CapabilityType.BROWSER_NAME).equals("BSAppium")) {
+                    logger.debug("Capability supported by browserstack appium mobile, should not be processed by " +
+                            "a browserswtack browser node: {}", requestedCapability);
+                    return false;
+                } else if (!requestedCapability.containsKey("app") && !nodeCapability.get(CapabilityType.BROWSER_NAME).equals("BrowserStack")) {
+                    logger.debug("Capability supported by browserstack browser, should not be processed by " +
+                            "a browserswtack mobile node: {}", requestedCapability);
+                    return false;
+                }
+            }
         }
 
         return true;

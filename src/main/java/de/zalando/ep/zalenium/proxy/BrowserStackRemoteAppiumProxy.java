@@ -47,7 +47,7 @@ public class BrowserStackRemoteAppiumProxy extends CloudTestingRemoteProxy {
             }
             logger.info(logMessage);
             Thread.currentThread().setName(currentName);
-            return addCapabilitiesToRegistrationRequest(registrationRequest, browserStackAccountConcurrency,
+            return addAppiumCapabilitiesToRegistrationRequest(registrationRequest, browserStackAccountConcurrency,
                     BROWSER_STACK_PROXY_NAME);
         } catch (Exception e) {
             logger.error(e.toString(), e);
@@ -84,47 +84,28 @@ public class BrowserStackRemoteAppiumProxy extends CloudTestingRemoteProxy {
 
     @Override
     public TestInformation getTestInformation(String seleniumSessionId) {
-        // https://BS_USER:BS_KEY@www.browserstack.com/app-automate/sessions/SELENIUM_SESSION_ID.json
-        String browserStackBaseTestUrl = "https://api-cloud.browserstack.com/app-automate/sessions/";
-        String browserStackTestUrl = browserStackBaseTestUrl + String.format("%s.json", seleniumSessionId);
+        // https://BS_USER:BS_KEY@www.browserstack.com/automate/sessions/SELENIUM_SESSION_ID.json
+        String browserStackAppiumBaseTestUrl = "https://api-cloud.browserstack.com/app-automate/sessions/";
+        String browserStackAppiumTestUrl = browserStackAppiumBaseTestUrl + String.format("%s.json", seleniumSessionId);
         for (int i = 0; i < 5; i++) {
             try {
-                JsonObject testData = getCommonProxyUtilities().readJSONFromUrl(browserStackTestUrl, BROWSER_STACK_USER,
-                    BROWSER_STACK_KEY).getAsJsonObject();
+                JsonObject testData = getCommonProxyUtilities().readJSONFromUrl(browserStackAppiumTestUrl, BROWSER_STACK_USER,
+                        BROWSER_STACK_KEY).getAsJsonObject();
                 JsonObject automation_session = testData.getAsJsonObject("automation_session");
                 String testName = automation_session.get("name").isJsonNull() ? null : automation_session.get("name").getAsString();
-                String browser = "N/A";
-                if (automation_session.get("browser").isJsonNull()) {
-                    if (!automation_session.get("device").isJsonNull()) {
-                        browser = automation_session.get("device").getAsString();
-                    }
-                } else {
-                    browser = automation_session.get("browser").getAsString();
-                }
+
+                String browser = automation_session.get("device").getAsString();
                 String browserVersion = automation_session.get("browser_version").isJsonNull()
-                    ? "N/A" : automation_session.get("browser_version").getAsString();
+                        ? "N/A" : automation_session.get("browser_version").getAsString();
                 String platform = automation_session.get("os").getAsString();
                 String platformVersion = automation_session.get("os_version").getAsString();
                 String videoUrl = automation_session.get("video_url").getAsString();
                 List<String> logUrls = new ArrayList<>();
-                if (automation_session.get("browser_console_logs_url").isJsonNull()) {
-                    if (!automation_session.get("appium_logs_url").isJsonNull()) {
-                        logUrls.add(automation_session.get("appium_logs_url").getAsString());
-                    }
-                } else {
-                    logUrls.add(automation_session.get("browser_console_logs_url").getAsString());
-                }
+                logUrls.add(automation_session.get("device_logs_url").getAsString());
 
                 List<RemoteLogFile> remoteLogFiles = new ArrayList<>();
-                remoteLogFiles.add(new RemoteLogFile(automation_session.get("logs").getAsString(), "browserstack.log", true));
-                if (automation_session.get("selenium_logs_url").isJsonNull()) {
-                    if (!automation_session.get("device_logs_url").isJsonNull()) {
-                        remoteLogFiles.add(new RemoteLogFile(automation_session.get("device_logs_url").getAsString(), "device.log", false));
-                    }
-                } else {
-                    remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
-                }
-
+                remoteLogFiles.add(new RemoteLogFile(automation_session.get("logs").getAsString(), "bsappium.log", true));
+                remoteLogFiles.add(new RemoteLogFile(automation_session.get("appium_logs_url").getAsString(), "selenium.log", true));
                 if (videoUrl.startsWith("http")) {
                     return new TestInformation.TestInformationBuilder()
                         .withSeleniumSessionId(seleniumSessionId)

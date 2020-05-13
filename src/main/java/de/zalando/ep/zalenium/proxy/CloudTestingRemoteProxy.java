@@ -120,6 +120,28 @@ public class CloudTestingRemoteProxy extends DefaultRemoteProxy {
         return registrationRequest;
     }
 
+    public static RegistrationRequest addBrowserCapabilitiesToRegistrationRequest(RegistrationRequest registrationRequest,
+                                                                           int concurrency, String proxyName) {
+        MutableCapabilities desiredCapabilities = new MutableCapabilities();
+        desiredCapabilities.setCapability(RegistrationRequest.MAX_INSTANCES, concurrency);
+        desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, proxyName);
+        desiredCapabilities.setCapability(CapabilityType.PLATFORM_NAME, Platform.ANY);
+        registrationRequest.getConfiguration().capabilities.add(desiredCapabilities);
+        registrationRequest.getConfiguration().maxSession = concurrency;
+        return registrationRequest;
+    }
+
+    public static RegistrationRequest addAppiumCapabilitiesToRegistrationRequest(RegistrationRequest registrationRequest,
+                                                                           int concurrency, String proxyName) {
+        MutableCapabilities desiredCapabilities = new MutableCapabilities();
+        desiredCapabilities.setCapability(RegistrationRequest.MAX_INSTANCES, concurrency);
+        desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, proxyName);
+        desiredCapabilities.setCapability(CapabilityType.PLATFORM_NAME, Platform.ANY);
+        registrationRequest.getConfiguration().capabilities.add(desiredCapabilities);
+        registrationRequest.getConfiguration().maxSession = concurrency;
+        return registrationRequest;
+    }
+
     public long getMaxTestIdleTime() {
         return maxTestIdleTime;
     }
@@ -262,7 +284,7 @@ public class CloudTestingRemoteProxy extends DefaultRemoteProxy {
     }
 
     public boolean useAuthenticationToDownloadFile() {
-        return false;
+        return true;
     }
 
     public void addTestToDashboard(String seleniumSessionId, boolean testCompleted) {

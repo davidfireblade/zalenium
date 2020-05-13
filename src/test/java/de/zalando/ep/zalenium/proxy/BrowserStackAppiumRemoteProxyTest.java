@@ -9,7 +9,6 @@ import de.zalando.ep.zalenium.util.CommonProxyUtilities;
 import de.zalando.ep.zalenium.util.Environment;
 import de.zalando.ep.zalenium.util.SimpleRegistry;
 import de.zalando.ep.zalenium.util.TestUtils;
-import io.appium.java_client.remote.MobileCapabilityType;
 import org.awaitility.Duration;
 import org.hamcrest.CoreMatchers;
 import org.junit.*;
@@ -44,6 +43,7 @@ public class BrowserStackAppiumRemoteProxyTest {
 
     private BrowserStackRemoteAppiumProxy browserStackRemoteAppiumProxy;
     private GridRegistry registry;
+    private Boolean firstMockTest = false;
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -105,8 +105,9 @@ public class BrowserStackAppiumRemoteProxyTest {
     public void sessionIsCreatedWithCapabilitiesThatDockerSeleniumCannotProcess() {
         // Capability which should result in a created session
         Map<String, Object> requestedCapability = new HashMap<>();
-        requestedCapability.put(MobileCapabilityType.BROWSER_NAME, "BrowserStack");
-        requestedCapability.put(MobileCapabilityType.PLATFORM_NAME, Platform.IOS);
+        requestedCapability.put(CapabilityType.BROWSER_NAME, "BrowserStack");
+        requestedCapability.put(CapabilityType.PLATFORM_NAME, Platform.IOS);
+        requestedCapability.put("app", "EasyTravel");
 
         Assert.assertEquals(0, browserStackRemoteAppiumProxy.getNumberOfSessions());
         TestSession testSession = browserStackRemoteAppiumProxy.getNewSession(requestedCapability);
@@ -121,8 +122,9 @@ public class BrowserStackAppiumRemoteProxyTest {
     public void credentialsAreAddedInSessionCreation() throws IOException {
         // Capability which should result in a created session
         Map<String, Object> requestedCapability = new HashMap<>();
-        requestedCapability.put(MobileCapabilityType.BROWSER_NAME, "BrowserStack");
-        requestedCapability.put(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
+        requestedCapability.put(CapabilityType.BROWSER_NAME, "BrowserStack");
+        requestedCapability.put(CapabilityType.PLATFORM_NAME, Platform.ANDROID);
+        requestedCapability.put("app", "EasyTravel");
 
         // Getting a test session in the sauce labs node
         TestSession testSession = browserStackRemoteAppiumProxy.getNewSession(requestedCapability);
@@ -153,46 +155,17 @@ public class BrowserStackAppiumRemoteProxyTest {
     public void testInformationIsRetrievedWhenStoppingSession() throws IOException {
         // Capability which should result in a created session
         try {
-            Map<String, Object> requestedCapability = new HashMap<>();
-            requestedCapability.put(MobileCapabilityType.BROWSER_NAME, BrowserType.CHROME);
-            requestedCapability.put(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
 
-            JsonElement informationSample = TestUtils.getTestInformationSample("browserstack_testinformation.json");
-            TestUtils.ensureRequiredInputFilesExist(temporaryFolder);
-            CommonProxyUtilities commonProxyUtilities = TestUtils.mockCommonProxyUtilitiesForDashboardTesting(temporaryFolder);
-            Environment env = new Environment();
-            String mockTestInformationUrl = "https://api-cloud.browserstack.com/app-automate/sessions/77e51cead8e6e37b0a0feb0dfa69325b2c4acf97.json";
-            when(commonProxyUtilities.readJSONFromUrl(mockTestInformationUrl,
-                    env.getStringEnvVariable("BROWSER_STACK_USER", ""),
-                    env.getStringEnvVariable("BROWSER_STACK_KEY", ""))).thenReturn(informationSample);
-            BrowserStackRemoteAppiumProxy.setCommonProxyUtilities(commonProxyUtilities);
-            Dashboard.setCommonProxyUtilities(commonProxyUtilities);
-
-            // Getting a test session in the sauce labs node
-            BrowserStackRemoteAppiumProxy bsSpyProxy = spy(browserStackRemoteAppiumProxy);
-            TestSession testSession = bsSpyProxy.getNewSession(requestedCapability);
-            Assert.assertNotNull(testSession);
-            String mockSeleniumSessionId = "368c8e995930980ae84e6d265a737149aa7e943c";
-            testSession.setExternalKey(new ExternalSessionKey(mockSeleniumSessionId));
-
-            // We release the session, the node should be free
-            WebDriverRequest request = mock(WebDriverRequest.class);
-            HttpServletResponse response = mock(HttpServletResponse.class);
-            when(request.getMethod()).thenReturn("DELETE");
-            when(request.getRequestType()).thenReturn(RequestType.STOP_SESSION);
-            testSession.getSlot().doFinishRelease();
-            bsSpyProxy.afterCommand(testSession, request, response);
-
-            verify(bsSpyProxy, timeout(1000 * 5)).getTestInformation(mockSeleniumSessionId);
-            Callable<Boolean> callable = () -> BrowserStackRemoteAppiumProxy.addToDashboardCalled;
-            await().pollInterval(Duration.FIVE_HUNDRED_MILLISECONDS).atMost(Duration.TWO_SECONDS).until(callable);
-            TestInformation testInformation = bsSpyProxy.getTestInformation(mockSeleniumSessionId);
-            Assert.assertEquals("loadZalandoPageAndCheckTitle", testInformation.getTestName());
-            Assert.assertThat(testInformation.getFileName(),
-                    CoreMatchers.containsString("browserstack_loadZalandoPageAndCheckTitle_Google_Pixel_3_android"));
-            Assert.assertEquals("Google Pixel 3 app, android 9.0", testInformation.getBrowserAndPlatform());
-            Assert.assertEquals("https://app-automate.browserstack.com/sessions/368c8e995930980ae84e6d265a737149aa7e943c/video?token=c3NrOHVqS1BkVmI0WHEvNVRSbnAvOFRVcG5SWVVlSzBXVVJwYWlFaDV6SlRCUE1GZGFmM3phVnQzN1pjN0RqdW01bWlVU05sdEpZZ1VKc0hkdTF1NGc9PS0tUGVsaDRWcGwyc0dzWnFUTXJRVHcvdz09--15e7e1ed280d268680218988827bd4c9994119f1&source=rest_api&diff=2183.829286866",
-                    testInformation.getVideoUrl());
+            // mobile app session
+            sessionMockTest(BrowserType.CHROME, Platform.ANDROID,
+                    "browserstack_appium_app_testinformation.json",
+                    "40693fb3fca7b00aac49e72908a648fcfa7af47a",
+                    "bsappium_loadZalandoPageAndCheckTitle_Google_Pixel_3_android",
+                    "Google Pixel 3 app, android 9.0",
+                    "https://app-automate.browserstack.com/sessions/40693fb3fca7b00aac49e72908a648fcfa7af47a/vi" +
+                            "deo?token=cmtPS05EejFrQmZxd3R4WlowOWVLYUxsWVFRbUhJbHh1Q0czYzcvM1pIY1RQMENXR2VWd2xNMnI3aEtz" +
+                            "NWUzeng3U0srU1VVRlFya2s5Q0cvbld3NWc9PS0teks3azkxSTEzRUlZT1N2QXNCVzFRQT09--0b5a5fadabfcf5ab" +
+                            "acc201104f9ba76eea5aae3b&source=rest_api&diff=45840.954378879");
 
         } finally {
             BrowserStackRemoteAppiumProxy.restoreCommonProxyUtilities();
@@ -202,12 +175,58 @@ public class BrowserStackAppiumRemoteProxyTest {
         }
     }
 
+    private void sessionMockTest(String browser, Platform platform, String informationSampleName, String mockSeleniumSessionId,
+                                 String testFileName, String browserAndPlatform, String videoUrl) throws IOException {
+        Map<String, Object> requestedCapability = new HashMap<>();
+        requestedCapability.put(CapabilityType.BROWSER_NAME, browser);
+        requestedCapability.put(CapabilityType.PLATFORM_NAME, platform);
+
+        JsonElement informationSample = TestUtils.getTestInformationSample(informationSampleName);
+        if (!firstMockTest) {
+            TestUtils.ensureRequiredInputFilesExist(temporaryFolder);
+            firstMockTest = true;
+        }
+        CommonProxyUtilities commonProxyUtilities = TestUtils.mockCommonProxyUtilitiesForDashboardTesting(temporaryFolder);
+        Environment env = new Environment();
+        String mockTestInformationUrl = "https://api-cloud.browserstack.com/app-automate/sessions/" + mockSeleniumSessionId + ".json";
+        when(commonProxyUtilities.readJSONFromUrl(mockTestInformationUrl,
+                env.getStringEnvVariable("BROWSER_STACK_USER", ""),
+                env.getStringEnvVariable("BROWSER_STACK_KEY", ""))).thenReturn(informationSample);
+        BrowserStackRemoteProxy.setCommonProxyUtilities(commonProxyUtilities);
+        Dashboard.setCommonProxyUtilities(commonProxyUtilities);
+
+        // Getting a test session in the sauce labs node
+        BrowserStackRemoteAppiumProxy bsSpyProxy = spy(browserStackRemoteAppiumProxy);
+        TestSession testSession = bsSpyProxy.getNewSession(requestedCapability);
+        Assert.assertNotNull(testSession);
+        testSession.setExternalKey(new ExternalSessionKey(mockSeleniumSessionId));
+
+        // We release the session, the node should be free
+        WebDriverRequest request = mock(WebDriverRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(request.getMethod()).thenReturn("DELETE");
+        when(request.getRequestType()).thenReturn(RequestType.STOP_SESSION);
+        testSession.getSlot().doFinishRelease();
+        bsSpyProxy.afterCommand(testSession, request, response);
+
+        verify(bsSpyProxy, timeout(1000 * 5)).getTestInformation(mockSeleniumSessionId);
+        Callable<Boolean> callable = () -> BrowserStackRemoteProxy.addToDashboardCalled;
+        await().pollInterval(Duration.FIVE_HUNDRED_MILLISECONDS).atMost(Duration.TWO_SECONDS).until(callable);
+        TestInformation testInformation = bsSpyProxy.getTestInformation(mockSeleniumSessionId);
+        Assert.assertEquals("loadZalandoPageAndCheckTitle", testInformation.getTestName());
+        Assert.assertThat(testInformation.getFileName(),
+                CoreMatchers.containsString(testFileName));
+        Assert.assertEquals(browserAndPlatform, testInformation.getBrowserAndPlatform());
+        Assert.assertEquals(videoUrl, testInformation.getVideoUrl());
+    }
+
     @Test
     public void requestIsNotModifiedInOtherRequestTypes() throws IOException {
         // Capability which should result in a created session
         Map<String, Object> requestedCapability = new HashMap<>();
-        requestedCapability.put(MobileCapabilityType.BROWSER_NAME, "BrowserStack");
-        requestedCapability.put(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
+        requestedCapability.put(CapabilityType.BROWSER_NAME, "BrowserStack");
+        requestedCapability.put(CapabilityType.PLATFORM_NAME, Platform.ANDROID);
+        requestedCapability.put("app", "EasyTravel");
 
         // Getting a test session in the sauce labs node
         TestSession testSession = browserStackRemoteAppiumProxy.getNewSession(requestedCapability);
@@ -223,8 +242,8 @@ public class BrowserStackAppiumRemoteProxyTest {
         when(request.getRequestType()).thenReturn(RequestType.REGULAR);
         JsonObject jsonObject = new JsonObject();
         JsonObject desiredCapabilities = new JsonObject();
-        desiredCapabilities.addProperty(MobileCapabilityType.BROWSER_NAME, BrowserType.CHROME);
-        desiredCapabilities.addProperty(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID.name());
+        desiredCapabilities.addProperty(CapabilityType.BROWSER_NAME, BrowserType.CHROME);
+        desiredCapabilities.addProperty(CapabilityType.PLATFORM_NAME, Platform.ANDROID.name());
         jsonObject.add("desiredCapabilities", desiredCapabilities);
         when(request.getBody()).thenReturn(jsonObject.toString());
 
@@ -254,6 +273,6 @@ public class BrowserStackAppiumRemoteProxyTest {
     @Test
     public void checkVideoFileExtensionAndProxyName() {
         Assert.assertEquals(".mp4", browserStackRemoteAppiumProxy.getVideoFileExtension());
-        Assert.assertEquals("BrowserStackAppium", browserStackRemoteAppiumProxy.getProxyName());
+        Assert.assertEquals("BSAppium", browserStackRemoteAppiumProxy.getProxyName());
     }
 }

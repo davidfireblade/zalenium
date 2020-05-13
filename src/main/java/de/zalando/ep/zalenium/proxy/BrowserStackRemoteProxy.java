@@ -47,7 +47,7 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
             }
             logger.info(logMessage);
             Thread.currentThread().setName(currentName);
-            return addCapabilitiesToRegistrationRequest(registrationRequest, browserStackAccountConcurrency,
+            return addBrowserCapabilitiesToRegistrationRequest(registrationRequest, browserStackAccountConcurrency,
                     BROWSER_STACK_PROXY_NAME);
         } catch (Exception e) {
             logger.error(e.toString(), e);
@@ -94,12 +94,13 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                 JsonObject automation_session = testData.getAsJsonObject("automation_session");
                 String testName = automation_session.get("name").isJsonNull() ? null : automation_session.get("name").getAsString();
                 String browser = "N/A";
+                List<RemoteLogFile> remoteLogFiles = new ArrayList<>();
                 if (automation_session.get("browser").isJsonNull()) {
-                    if (!automation_session.get("device").isJsonNull()) {
-                        browser = automation_session.get("device").getAsString();
-                    }
+                    browser = automation_session.get("device").getAsString();
+                    remoteLogFiles.add(new RemoteLogFile(automation_session.get("appium_logs_url").getAsString(), "selenium.log", true));
                 } else {
                     browser = automation_session.get("browser").getAsString();
+                    remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
                 }
                 String browserVersion = automation_session.get("browser_version").isJsonNull()
                     ? "N/A" : automation_session.get("browser_version").getAsString();
@@ -109,9 +110,7 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                 List<String> logUrls = new ArrayList<>();
                 logUrls.add(automation_session.get("browser_console_logs_url").getAsString());
 
-                List<RemoteLogFile> remoteLogFiles = new ArrayList<>();
                 remoteLogFiles.add(new RemoteLogFile(automation_session.get("logs").getAsString(), "browserstack.log", true));
-                remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
                 if (videoUrl.startsWith("http")) {
                     return new TestInformation.TestInformationBuilder()
                         .withSeleniumSessionId(seleniumSessionId)

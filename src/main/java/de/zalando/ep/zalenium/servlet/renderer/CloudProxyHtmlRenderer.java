@@ -95,7 +95,7 @@ public class CloudProxyHtmlRenderer implements HtmlRenderer {
             icon = contextPath + "/grid/resources/images/browserstack.png";
         }
         if (proxy instanceof BrowserStackRemoteAppiumProxy) {
-            icon = contextPath + "/grid/resources/images/appium.png";
+            icon = contextPath + "/grid/resources/images/bsappium.png";
         }
         if (proxy instanceof SauceLabsRemoteProxy) {
             icon = contextPath + "/grid/resources/images/saucelabs.png";

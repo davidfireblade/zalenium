@@ -98,7 +98,7 @@ public class CommonProxyUtilities {
             throws InterruptedException {
         int currentAttempts = 0;
         // Videos are usually not ready right away, we put a little sleep to avoid falling into the catch/retry.
-        Thread.sleep(1000 * 5);
+        Thread.sleep(1000 * 10);
         while (currentAttempts < maxAttempts) {
             try {
                 URL link = new URL(fileUrl);

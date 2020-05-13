@@ -22,6 +22,7 @@ public class TestInformation {
     private static final String ZALENIUM_PROXY_NAME = "Zalenium";
     private static final String SAUCE_LABS_PROXY_NAME = "SauceLabs";
     private static final String BROWSER_STACK_PROXY_NAME = "BrowserStack";
+    private static final String BROWSER_STACK_APPIUM_PROXY_NAME = "BSAppium";
     private static final String LAMBDA_TEST_PROXY_NAME = "LambdaTest";
     private static final CommonProxyUtilities commonProxyUtilities = new CommonProxyUtilities();
     private String seleniumSessionId;
@@ -166,6 +167,8 @@ public class TestInformation {
             seleniumLogFileName = fileName.concat("selenium-server.log");
         } else if (BROWSER_STACK_PROXY_NAME.equalsIgnoreCase(proxyName)){
             seleniumLogFileName = fileName.concat("selenium.log");
+        } else if (BROWSER_STACK_APPIUM_PROXY_NAME.equalsIgnoreCase(proxyName)){
+            seleniumLogFileName = fileName.concat("selenium.log");
         } else if (LAMBDA_TEST_PROXY_NAME.equalsIgnoreCase(proxyName)){
             seleniumLogFileName = fileName.concat("selenium.log");
         } else {
@@ -188,6 +191,8 @@ public class TestInformation {
             browserDriverLogFileName = fileName.concat("log.json");
         } else if (BROWSER_STACK_PROXY_NAME.equalsIgnoreCase(proxyName)){
             browserDriverLogFileName = fileName.concat("browserstack.log");
+        } else if (BROWSER_STACK_APPIUM_PROXY_NAME.equalsIgnoreCase(proxyName)){
+            browserDriverLogFileName = fileName.concat("bsappium.log");
         }  else if (LAMBDA_TEST_PROXY_NAME.equalsIgnoreCase(proxyName)){
             browserDriverLogFileName = fileName.concat("lambdatest.log");
         } else {
@@ -240,7 +245,7 @@ public class TestInformation {
     }
 
     public String getBrowserAndPlatform() {
-        if (BROWSER_STACK_PROXY_NAME.equalsIgnoreCase(proxyName)) {
+        if (BROWSER_STACK_PROXY_NAME.equalsIgnoreCase(proxyName) || BROWSER_STACK_APPIUM_PROXY_NAME.equalsIgnoreCase(proxyName)) {
             return String.format("%s %s, %s %s", browser, browserVersion, platform, platformVersion);
         }
         return String.format("%s %s, %s", browser, browserVersion, platform);
