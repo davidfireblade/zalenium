@@ -167,8 +167,8 @@ public class BrowserStackRemoteProxyTest {
             sessionMockTest(BrowserType.CHROME, Platform.WIN10,
                     "browserstack_browser_testinformation.json",
                     "77e51cead8e6e37b0a0feb0dfa69325b2c4acf97",
-                    "browserstack_loadZalandoPageAndCheckTitle_safari_OS_X",
-                    "safari 12.1, OS X Mojave",
+                    "browserstack_loadZalandoPageAndCheckTitle_safari_apple",
+                    "safari 12.1, apple Mojave",
                     "https://automate.browserstack.com/sessions/d27616b6b88fc593b54a5dd7fb72c8ebca" +
                             "7f510e/video?token=NFRqNEc0TVdvV1BhMVZhdmdrOGNjRFcrTEhxbUdUb1ZieEhxQVg5ZlNsWU0yQ2lnU2tGTTV4TEVyLzN" +
                             "uYWR4NEQ2ZllJcytQcGtHRWlPd0IrSnlOU2c9PS0td0VURUF0YmxlNEpicXB5YzZHdnpMQT09--2e1f2f625e7996f64e08d36" +

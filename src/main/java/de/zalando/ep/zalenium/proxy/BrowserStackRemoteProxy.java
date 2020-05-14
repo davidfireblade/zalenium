@@ -100,11 +100,19 @@ public class BrowserStackRemoteProxy extends CloudTestingRemoteProxy {
                     remoteLogFiles.add(new RemoteLogFile(automation_session.get("appium_logs_url").getAsString(), "selenium.log", true));
                 } else {
                     browser = automation_session.get("browser").getAsString();
+                    if (browser.equalsIgnoreCase("edge")) {
+                        browser = "microsoftedge";
+                    } else if (browser.equalsIgnoreCase("ie")) {
+                        browser = "iexplore";
+                    }
                     remoteLogFiles.add(new RemoteLogFile(automation_session.get("selenium_logs_url").getAsString(), "selenium.log", false));
                 }
                 String browserVersion = automation_session.get("browser_version").isJsonNull()
                     ? "N/A" : automation_session.get("browser_version").getAsString();
                 String platform = automation_session.get("os").getAsString();
+                if (platform.equalsIgnoreCase("os x")) {
+                    platform = "apple";
+                }
                 String platformVersion = automation_session.get("os_version").getAsString();
                 String videoUrl = automation_session.get("video_url").getAsString();
                 List<String> logUrls = new ArrayList<>();

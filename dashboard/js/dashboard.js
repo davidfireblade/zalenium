@@ -8,6 +8,10 @@ function addTestItem(item) {
         platformLogo = "apple";
     } else if (item.platform.toLowerCase().includes("windows")) {
         platformLogo = "windows";
+    } else if (item.platform.toLowerCase().includes("ios")) {
+        platformLogo = "ios";
+    } else if (item.platform.toLowerCase().includes("android")) {
+        platformLogo = "android";
     } else {
         platformLogo = item.platform.toLowerCase();
     }
